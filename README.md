@@ -101,10 +101,12 @@ $$ L = -\sum_i y_i \log(\hat{y}_i) $$
 Optimizers handle updating the model parameters using the calculated gradients.
 
 - **SGD (Stochastic Gradient Descent)**
+
   $$ \theta_t = \theta_{t-1} - \alpha g_t $$
 
 - **Adam (Adaptive Moment Estimation)**
   Maintains moving averages of the gradients and squared gradients.
+
   $$
   \begin{aligned}
   m_t &= \beta_1 m_{t-1} + (1-\beta_1)g_t \\
