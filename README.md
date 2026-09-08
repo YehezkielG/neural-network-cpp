@@ -146,7 +146,7 @@ int main() {
 
     // 2. Training Loop
     for (int epoch = 0; epoch < epochs; ++epoch) {
-        for (size_t i = 0; i < 10000; ++i) { 
+        for (size_t i = 0; i < 10000; ++i) { // Assuming 10k samples
             
             // Get Input & Target Tensors for this iteration
             Tensor X({images[i]});
