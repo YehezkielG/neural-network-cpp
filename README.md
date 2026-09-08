@@ -131,30 +131,46 @@ Here is a short example of defining a 2-layer network, running a forward pass, a
 
 ```cpp
 #include "neuron.h"
+#include "optimizer.h"
 
 using namespace nn;
 
-// Define layers
-linear layer1(784, 128);
-linear layer2(128, 10);
-adam optimizer; // Assuming optimizer setup
+int main() {
+    // 1. Define Model Architecture
+    linear layer1(784, 128);
+    linear layer2(128, 10);
+    optim optimizer("adam");
 
-// Forward pass
-Tensor hidden = layer1(X);
-hidden = hidden.ReLU();
+    int epochs = 3;
+    double learning_rate = 0.001;
 
-Tensor logits = layer2(hidden);
-Tensor probabilities = logits.softmax();
+    // 2. Training Loop
+    for (int epoch = 0; epoch < epochs; ++epoch) {
+        for (size_t i = 0; i < 10000; ++i) { 
+            
+            // Get Input & Target Tensors for this iteration
+            Tensor X({images[i]});
+            Tensor Y({targets[i]});
 
-// Compute loss
-Tensor loss = CategoricalCrossEntropy(Y, probabilities);
+            // 3. Forward Pass
+            Tensor hidden = layer1(X).ReLU();
+            Tensor probabilities = layer2(hidden).softmax();
 
-// Backward pass (Compute gradients)
-loss.backward();
+            // 4. Compute Loss
+            Tensor loss = CategoricalCrossEntropy(Y, probabilities);
 
-// Update weights
-optimizer.step(loss, 0.001);
-loss.zero_grad();
+            // 5. Backward Pass (Compute Gradients)
+            loss.backward();
+
+            // 6. Optimizer Step (Update Weights)
+            optimizer.step(loss, learning_rate);
+
+            // 7. Zero Gradients for next iteration
+            loss.zero_grad();
+        }
+    }
+    return 0;
+}
 ```
 
 ## 🧪 MNIST Experiment
