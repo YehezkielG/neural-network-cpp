@@ -100,22 +100,23 @@ $$ L = -\sum_i y_i \log(\hat{y}_i) $$
 
 Optimizers handle updating the model parameters using the calculated gradients.
 
-- **SGD (Stochastic Gradient Descent)**
+**SGD (Stochastic Gradient Descent)**
 
-  $$ \theta_t = \theta_{t-1} - \alpha g_t $$
+$$ \theta_t = \theta_{t-1} - \alpha g_t $$
 
-- **Adam (Adaptive Moment Estimation)**
-  Maintains moving averages of the gradients and squared gradients.
+**Adam (Adaptive Moment Estimation)**
 
-  $$
-  \begin{aligned}
-  m_t &= \beta_1 m_{t-1} + (1-\beta_1)g_t \\
-  v_t &= \beta_2 v_{t-1} + (1-\beta_2)g_t^2 \\
-  \hat{m}_t &= \frac{m_t}{1-\beta_1^t} \\
-  \hat{v}_t &= \frac{v_t}{1-\beta_2^t} \\
-  \theta_t &= \theta_{t-1} - \alpha \frac{\hat{m}_t}{\sqrt{\hat{v}_t}+\epsilon}
-  \end{aligned}
-  $$
+Maintains moving averages of the gradients and squared gradients.
+
+$$
+\begin{aligned}
+m_t &= \beta_1 m_{t-1} + (1-\beta_1)g_t \\
+v_t &= \beta_2 v_{t-1} + (1-\beta_2)g_t^2 \\
+\hat{m}_t &= \frac{m_t}{1-\beta_1^t} \\
+\hat{v}_t &= \frac{v_t}{1-\beta_2^t} \\
+\theta_t &= \theta_{t-1} - \alpha \frac{\hat{m}_t}{\sqrt{\hat{v}_t}+\epsilon}
+\end{aligned}
+$$
 
 ## 🏗️ Neural Network Layers
 
