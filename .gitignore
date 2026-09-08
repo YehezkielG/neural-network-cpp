@@ -1,2 +1,3 @@
 *.exe
 other/
+mnist dataset/

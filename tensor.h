@@ -23,6 +23,10 @@ struct TensorImpl : public enable_shared_from_this<TensorImpl>{
     int cols = 0;
     bool isOperation = false;
 
+    vector<shared_ptr<TensorImpl>> topo;
+    set<shared_ptr<TensorImpl>> visited;
+
+
     // 1. Constructor Default
     TensorImpl() : rows(0), cols(0), isOperation(false) {}
 
@@ -478,9 +482,6 @@ struct TensorImpl : public enable_shared_from_this<TensorImpl>{
     }
 
     void backward() {
-        vector<shared_ptr<TensorImpl>> topo;
-        set<shared_ptr<TensorImpl>> visited;
-
         function<void(shared_ptr<TensorImpl>)> build_topo = [&](shared_ptr<TensorImpl> node) {
             if (!node || visited.count(node)) return;
             visited.insert(node);
@@ -505,12 +506,15 @@ struct TensorImpl : public enable_shared_from_this<TensorImpl>{
     }
 
     void step(double lr) {
-        if (!grads) return;
-        for (size_t i = 0; i < data.size(); ++i) {
-            data[i] -= lr * grads->data[i];
-        }
-    }    
+        throw invalid_argument("Set your optimizer first");
+    }
 
+    void zero_grad() {
+        if (!grads) return;
+        for (size_t i = 0; i < grads->data.size(); ++i) {
+            grads->data[i] = 0.0;
+        }
+    }
 };
 
 class Tensor {
@@ -539,7 +543,18 @@ public:
     Tensor ReLU() const { return Tensor(TensorImpl::ReLU(this->impl)); }
     Tensor softmax() const { return Tensor(TensorImpl::Softmax(this->impl)); }
 
-    
+    void step(double lr) {
+        for (auto node : impl->topo) {
+            node->step(lr);
+        }
+    }
+
+    void zero_grad() {
+        for (auto node : impl->topo) {
+            node->zero_grad();
+        }
+    }
+
     void backward() {
         if (impl) impl->backward();
     }
