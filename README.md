@@ -22,13 +22,17 @@ At the core of the framework is the custom `Tensor` abstraction, utilizing the H
 ```text
 Tensor (Handle)
   ↓
-std::shared_ptr
+std::shared_ptr<TensorImpl>
   ↓
 TensorImpl (Body)
-  ├── data (std::vector)
-  ├── gradients
-  ├── computational graph (previous nodes)
-  └── backward function
+  ├── vector<double> data                // Flattened 1D array for matrix values
+  ├── shared_ptr<TensorImpl> grads       // Gradients for backpropagation
+  ├── set<shared_ptr<TensorImpl>> _prev  // Links to previous nodes (Computational Graph)
+  ├── function _backward                 // Lambda for calculating local gradients
+  ├── string name                        // Operation or variable name
+  ├── int rows                           // Matrix row dimension
+  ├── int cols                           // Matrix column dimension
+  └── bool isOperation                   // Flag for topological sort
 ```
 
 The `Tensor` class serves as a lightweight wrapper that users interact with. The actual tensor data, gradients, links to the computational graph, and the specific backward derivative functions are stored inside `TensorImpl` on the heap.
