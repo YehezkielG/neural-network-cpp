@@ -12,7 +12,7 @@
 using namespace std;
 
 struct TensorImpl;
-// 1. Data & Graph disimpan di TensorImpl (Heap)
+// 1. Data & Graph
 struct TensorImpl : public enable_shared_from_this<TensorImpl>{
     vector<double> data;
     shared_ptr<TensorImpl> grads = nullptr;
@@ -27,10 +27,10 @@ struct TensorImpl : public enable_shared_from_this<TensorImpl>{
     set<shared_ptr<TensorImpl>> visited;
 
 
-    // 1. Constructor Default
+    // 1. Constructor 
     TensorImpl() : rows(0), cols(0), isOperation(false) {}
 
-    // 2. Constructor dari 1D vector<double>
+    // 2. Constructor 1D vector<double>
     TensorImpl(const vector<double>& d, int r = 1, int c = -1) : data(d), rows(r) {
         cols = (c == -1) ? d.size() : c;
         name = "init_" + to_string(rows) + "x" + to_string(cols);
